@@ -13,9 +13,12 @@ namespace LojaCL
 {
     public partial class FrmCrudUsuario : Form
     {
+        private Cripto b;
+        SqlConnection con = Conexao.obterConexao();
         public FrmCrudUsuario()
         {
             InitializeComponent();
+            b = new Cripto();
         }
 
         public void CarregaDgvUsuario()
@@ -47,7 +50,12 @@ namespace LojaCL
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@nome", txtNome.Text);
                 cmd.Parameters.AddWithValue("@login", txtLogin.Text);
-                cmd.Parameters.AddWithValue("@senha", txtSenha.Text);
+                //Pego o valor o txtSenha e codifico ela.
+                txtSenha.Text = b.Base64Encode(txtSenha.Text);
+                //Crio uma nova varialvel e atribuo o txtSenha a ela.
+                string criptografada = txtSenha.Text;
+                //Passo para o parametro gravar a senha decodificada.
+                cmd.Parameters.AddWithValue("@senha", criptografada);
                 Conexao.obterConexao();
                 cmd.ExecuteNonQuery();
                 CarregaDgvUsuario();
