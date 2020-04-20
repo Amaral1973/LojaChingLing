@@ -12,3 +12,4 @@ C:\Programas\LojaCL\obj\Debug\LojaCL.FrmCrudProduto.resources
 C:\Programas\LojaCL\obj\Debug\LojaCL.FrmVenda.resources
 C:\Programas\LojaCL\obj\Debug\LojaCL.FrmCrudUsuario.resources
 C:\Programas\LojaCL\obj\Debug\LojaCL.FrmLogin.resources
+C:\Programas\LojaCL\obj\Debug\LojaCL.FrmCrudCartaoVenda.resources

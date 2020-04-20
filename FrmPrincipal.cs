@@ -18,6 +18,37 @@ namespace LojaCL
             InitializeComponent();
         }
 
+        public void CarregadgvPripedi()
+        {
+            SqlConnection con = Conexao.obterConexao();
+            String query = "select * from cartaovenda";
+            SqlCommand cmd = new SqlCommand(query, con);
+            Conexao.obterConexao();
+            cmd.CommandType = CommandType.Text;
+            //SQLDataAdapter, usado para preencher o DataTable
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            //Adiciona um DataTable carregado em memória
+            DataTable cartao = new DataTable();
+            da.Fill(cartao);
+            //Fonte de dados
+            dgvPripedi.DataSource = cartao;
+            //Quando for criar um controle em tempo de execução, é importante atribuir um nome para ele, e definir as principais propriedades do controle
+            DataGridViewButtonColumn fechar = new DataGridViewButtonColumn();
+            fechar.Name = "FecharConta";
+            fechar.HeaderText = "Fechar Conta";
+            fechar.Text = "Fechar Conta";
+            fechar.UseColumnTextForButtonValue = true;
+            int columIndex = 4;
+            dgvPripedi.Columns.Insert(columIndex, fechar);
+            Conexao.fecharConexao();
+            dgvPripedi.CellClick += dgvPripedi_CellClick;
+            int colunas = dgvPripedi.Columns.Count;
+            if(colunas > 5)
+            {
+                dgvPripedi.Columns.Remove("FecharConta");
+            }
+        }
+
         private void sairToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Environment.Exit(0);
@@ -63,6 +94,36 @@ namespace LojaCL
         {
             FrmCrudUsuario usu = new FrmCrudUsuario();
             usu.Show();
+        }
+
+        private void cartãoDeVendaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmCrudCartaoVenda ven = new FrmCrudCartaoVenda();
+            ven.Show();
+        }
+
+        private void dgvPripedi_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            try
+            {
+                if(e.ColumnIndex == dgvPripedi.Columns["FecharConta"].Index)
+                {
+                    if(Application.OpenForms["FrmVenda"] == null)
+                    {
+                        FrmVenda ven = new FrmVenda();
+                        ven.Show();
+                    }
+                }
+            }
+            catch
+            {
+
+            }
+        }
+
+        private void FrmPrincipal_Load(object sender, EventArgs e)
+        {
+            CarregadgvPripedi();
         }
     }
 }
