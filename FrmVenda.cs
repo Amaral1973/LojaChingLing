@@ -19,18 +19,24 @@ namespace LojaCL
             InitializeComponent();
         }
 
-        public void CarregacbxCliente()
+        public FrmVenda(string numero)
         {
-            string cli = "select cpf, nome from cliente";
-            SqlCommand cmd = new SqlCommand(cli, con);
+            InitializeComponent();
+            cbxCartao.Text = Convert.ToString(numero);
+        }
+
+        public void CarregacbxCartao()
+        {
+            string cartao = "select * from cartaovenda";
+            SqlCommand cmd = new SqlCommand(cartao, con);
             Conexao.obterConexao();
             cmd.CommandType = CommandType.Text;
-            SqlDataAdapter da = new SqlDataAdapter(cli, con);
+            SqlDataAdapter da = new SqlDataAdapter(cartao, con);
             DataSet ds = new DataSet();
-            da.Fill(ds, "nome");
-            cbxCliente.ValueMember = "cpf";
-            cbxCliente.DisplayMember = "nome";
-            cbxCliente.DataSource = ds.Tables["nome"];
+            da.Fill(ds, "numero");
+            cbxCartao.ValueMember = "Id";
+            cbxCartao.DisplayMember = "numero";
+            cbxCartao.DataSource = ds.Tables["numero"];
             Conexao.fecharConexao();
         } 
 
@@ -56,18 +62,42 @@ namespace LojaCL
 
         private void FrmVenda_Load(object sender, EventArgs e)
         {
-            if (cbxCliente.DisplayMember == "")
+            if (cbxCartao.Text == "")
             {
-                cbxProduto.Enabled = false;
-                txtQuantidade.Enabled = false;
-                txtValor.Enabled = false;
-                txtValorTotal.Enabled = false;
-                btnNovoItem.Enabled = false;
-                btnFinalizar.Enabled = false;
-                btnEcluirItem.Enabled = false;
-                btnEditarItem.Enabled = false;
+                CarregacbxCartao();
             }
-            CarregacbxCliente();
+            else
+            {
+                int num_cartao = Convert.ToInt32(cbxCartao.Text);
+                SqlConnection con = Conexao.obterConexao();
+                SqlCommand cmd = con.CreateCommand();
+                cmd.CommandText = "LocalizarVendaGrid";
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@numero", num_cartao);
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataSet ds = new DataSet();
+                da.Fill(ds);
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    dgvVenda.DataSource = ds.Tables[0];
+                    ds.Dispose();
+                    Conexao.fecharConexao();
+                }
+                else
+                {
+                    MessageBox.Show("Nenhum registro encontrado!", "Sem registro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    ds.Dispose();
+                    Conexao.fecharConexao();
+                    cbxCartao.Text = "";
+                    CarregacbxCartao();
+                }
+                decimal soma = 0;
+                foreach (DataGridViewRow dr in dgvVenda.Rows)
+                {
+                    soma += Convert.ToDecimal(dr.Cells[5].Value);
+                    txtValorTotal.Text = Convert.ToString(soma);
+                }
+            }
         }
 
         private void btnNovaVenda_Click(object sender, EventArgs e)
@@ -172,7 +202,7 @@ namespace LojaCL
             SqlCommand cmd = new SqlCommand("InserirVenda", con);
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.AddWithValue("@valor_pago", SqlDbType.Decimal).Value = Convert.ToDecimal(txtValorTotal.Text);
-            cmd.Parameters.AddWithValue("@id_cliente", SqlDbType.NChar).Value = cbxCliente.SelectedValue;
+            cmd.Parameters.AddWithValue("@id_cliente", SqlDbType.NChar).Value = cbxCartao.SelectedValue;
             cmd.ExecuteNonQuery();
             string idvenda = "select IDENT_CURRENT('venda') as id_venda";
             SqlCommand cmdvenda = new SqlCommand(idvenda, con);

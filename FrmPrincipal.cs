@@ -110,7 +110,8 @@ namespace LojaCL
                 {
                     if(Application.OpenForms["FrmVenda"] == null)
                     {
-                        FrmVenda ven = new FrmVenda();
+                        string numero = dgvPripedi[1, e.RowIndex].Value.ToString();
+                        FrmVenda ven = new FrmVenda(numero);
                         ven.Show();
                     }
                 }
@@ -124,6 +125,12 @@ namespace LojaCL
         private void FrmPrincipal_Load(object sender, EventArgs e)
         {
             CarregadgvPripedi();
+        }
+
+        private void pedidosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmPedido ped = new FrmPedido();
+            ped.Show();
         }
     }
 }

@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.btnNovaVenda = new System.Windows.Forms.Button();
-            this.cbxCliente = new System.Windows.Forms.ComboBox();
+            this.btnLocalizar = new System.Windows.Forms.Button();
+            this.cbxCartao = new System.Windows.Forms.ComboBox();
             this.lblCliente = new System.Windows.Forms.Label();
             this.txtQuantidade = new System.Windows.Forms.TextBox();
             this.dgvVenda = new System.Windows.Forms.DataGridView();
@@ -49,33 +49,33 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgvVenda)).BeginInit();
             this.SuspendLayout();
             // 
-            // btnNovaVenda
+            // btnLocalizar
             // 
-            this.btnNovaVenda.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnNovaVenda.Location = new System.Drawing.Point(374, 19);
-            this.btnNovaVenda.Name = "btnNovaVenda";
-            this.btnNovaVenda.Size = new System.Drawing.Size(92, 23);
-            this.btnNovaVenda.TabIndex = 0;
-            this.btnNovaVenda.Text = "Nova Venda";
-            this.btnNovaVenda.UseVisualStyleBackColor = true;
-            this.btnNovaVenda.Click += new System.EventHandler(this.btnNovaVenda_Click);
+            this.btnLocalizar.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnLocalizar.Location = new System.Drawing.Point(374, 19);
+            this.btnLocalizar.Name = "btnLocalizar";
+            this.btnLocalizar.Size = new System.Drawing.Size(92, 23);
+            this.btnLocalizar.TabIndex = 0;
+            this.btnLocalizar.Text = "Localizar";
+            this.btnLocalizar.UseVisualStyleBackColor = true;
+            this.btnLocalizar.Click += new System.EventHandler(this.btnNovaVenda_Click);
             // 
-            // cbxCliente
+            // cbxCartao
             // 
-            this.cbxCliente.FormattingEnabled = true;
-            this.cbxCliente.Location = new System.Drawing.Point(80, 19);
-            this.cbxCliente.Name = "cbxCliente";
-            this.cbxCliente.Size = new System.Drawing.Size(279, 21);
-            this.cbxCliente.TabIndex = 1;
+            this.cbxCartao.FormattingEnabled = true;
+            this.cbxCartao.Location = new System.Drawing.Point(80, 19);
+            this.cbxCartao.Name = "cbxCartao";
+            this.cbxCartao.Size = new System.Drawing.Size(279, 21);
+            this.cbxCartao.TabIndex = 1;
             // 
             // lblCliente
             // 
             this.lblCliente.AutoSize = true;
             this.lblCliente.Location = new System.Drawing.Point(12, 22);
             this.lblCliente.Name = "lblCliente";
-            this.lblCliente.Size = new System.Drawing.Size(39, 13);
+            this.lblCliente.Size = new System.Drawing.Size(38, 13);
             this.lblCliente.TabIndex = 2;
-            this.lblCliente.Text = "Cliente";
+            this.lblCliente.Text = "Cartão";
             // 
             // txtQuantidade
             // 
@@ -238,8 +238,8 @@
             this.Controls.Add(this.dgvVenda);
             this.Controls.Add(this.txtQuantidade);
             this.Controls.Add(this.lblCliente);
-            this.Controls.Add(this.cbxCliente);
-            this.Controls.Add(this.btnNovaVenda);
+            this.Controls.Add(this.cbxCartao);
+            this.Controls.Add(this.btnLocalizar);
             this.Name = "FrmVenda";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Venda";
@@ -252,8 +252,8 @@
 
         #endregion
 
-        private System.Windows.Forms.Button btnNovaVenda;
-        private System.Windows.Forms.ComboBox cbxCliente;
+        private System.Windows.Forms.Button btnLocalizar;
+        private System.Windows.Forms.ComboBox cbxCartao;
         private System.Windows.Forms.Label lblCliente;
         private System.Windows.Forms.TextBox txtQuantidade;
         private System.Windows.Forms.DataGridView dgvVenda;
