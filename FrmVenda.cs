@@ -65,6 +65,7 @@ namespace LojaCL
             if (cbxCartao.Text == "")
             {
                 CarregacbxCartao();
+                CarregacbxProduto();
             }
             else
             {
@@ -74,6 +75,13 @@ namespace LojaCL
                 cmd.CommandText = "LocalizarVendaGrid";
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@numero", num_cartao);
+                SqlDataReader reader;
+                reader = cmd.ExecuteReader();
+                if (reader.Read())
+                {
+                    txtUsuario.Text = reader[1].ToString();
+                    reader.Close();
+                }
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 DataSet ds = new DataSet();
                 da.Fill(ds);
@@ -91,6 +99,7 @@ namespace LojaCL
                     cbxCartao.Text = "";
                     CarregacbxCartao();
                 }
+                CarregacbxProduto();
                 decimal soma = 0;
                 foreach (DataGridViewRow dr in dgvVenda.Rows)
                 {
@@ -100,21 +109,38 @@ namespace LojaCL
             }
         }
 
-        private void btnNovaVenda_Click(object sender, EventArgs e)
+        private void btnLocalizar_Click(object sender, EventArgs e)
         {
-            cbxProduto.Enabled = true;
-            txtQuantidade.Enabled = true;
-            txtValor.Enabled = true;
-            btnNovoItem.Enabled = true;
-            btnFinalizar.Enabled = true;
-            btnEcluirItem.Enabled = true;
-            btnEditarItem.Enabled = true;
+            int num_cartao = Convert.ToInt32(cbxCartao.Text);
+            SqlConnection con = Conexao.obterConexao();
+            SqlCommand cmd = con.CreateCommand();
+            cmd.CommandText = "LocalizarVendaGrid";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@numero", num_cartao);
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                dgvVenda.DataSource = ds.Tables[0];
+                ds.Dispose();
+                Conexao.fecharConexao();
+            }
+            else
+            {
+                MessageBox.Show("Nenhum registro encontrado!", "Sem registro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                dgvVenda.DataSource = null;
+                Conexao.fecharConexao();
+                cbxCartao.Text = "";
+                CarregacbxCartao();
+            }
+            decimal soma = 0;
+            foreach (DataGridViewRow dr in dgvVenda.Rows)
+            {
+                soma += Convert.ToDecimal(dr.Cells[5].Value);
+                txtValorTotal.Text = Convert.ToString(soma);
+            }
             CarregacbxProduto();
-            dgvVenda.Columns.Add("ID", "ID");
-            dgvVenda.Columns.Add("Produto", "Produto");
-            dgvVenda.Columns.Add("Quantidade", "Quantidade");
-            dgvVenda.Columns.Add("Valor", "Valor");
-            dgvVenda.Columns.Add("Total", "Total");
         }
 
         private void cbxProduto_SelectedIndexChanged(object sender, EventArgs e)
@@ -139,14 +165,46 @@ namespace LojaCL
 
         private void btnNovoItem_Click(object sender, EventArgs e)
         {
-            DataGridViewRow item = new DataGridViewRow();
-            item.CreateCells(dgvVenda);
-            item.Cells[0].Value = txtId.Text;
-            item.Cells[1].Value = cbxProduto.Text;
-            item.Cells[2].Value = txtQuantidade.Text;
-            item.Cells[3].Value = txtValor.Text;
-            item.Cells[4].Value = Convert.ToDouble(txtValor.Text) * Convert.ToDouble(txtQuantidade.Text);
-            dgvVenda.Rows.Add(item);
+            int num_cartao = Convert.ToInt32(cbxCartao.Text);
+            SqlConnection con = Conexao.obterConexao();
+            SqlCommand cmd = con.CreateCommand();
+            cmd.CommandText = "LocalizarIDCartao";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@numero", num_cartao);
+            SqlDataReader reader;
+            reader = cmd.ExecuteReader();
+            Int32 cartao = 0;
+            if (reader.Read())
+            {
+                cartao = reader.GetInt32(0);
+                reader.Close();
+            }
+            SqlCommand pedidos = new SqlCommand("InserirPedidos", con);
+            pedidos.CommandType = CommandType.StoredProcedure;
+            pedidos.Parameters.AddWithValue("@id_cartaovenda", SqlDbType.Int).Value = cartao;
+            pedidos.Parameters.AddWithValue("@id_produto", SqlDbType.Int).Value = cbxProduto.SelectedValue;
+            pedidos.Parameters.AddWithValue("@usuario", SqlDbType.NChar).Value = txtUsuario.Text;
+            pedidos.Parameters.AddWithValue("@quantidade", SqlDbType.Int).Value = Convert.ToInt32(txtQuantidade.Text);
+            pedidos.Parameters.AddWithValue("@dia_hora", SqlDbType.DateTime).Value = DateTime.Now;
+            pedidos.Parameters.AddWithValue("@valor", SqlDbType.Int).Value = Convert.ToDecimal(txtValor.Text);
+            pedidos.Parameters.AddWithValue("@total", SqlDbType.Int).Value = Convert.ToDecimal(txtQuantidade.Text) * Convert.ToDecimal(txtValor.Text);
+            Conexao.obterConexao();
+            pedidos.ExecuteNonQuery();
+            Conexao.fecharConexao();
+            MessageBox.Show("Venda atualizada!", "Atualizar Venda", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            SqlCommand cmd2 = con.CreateCommand();
+            cmd2.CommandText = "LocalizarVendaGrid";
+            cmd2.CommandType = CommandType.StoredProcedure;
+            cmd2.Parameters.AddWithValue("@numero", num_cartao);
+            SqlDataAdapter da = new SqlDataAdapter(cmd2);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                dgvVenda.DataSource = ds.Tables[0];
+                ds.Dispose();
+                Conexao.fecharConexao();
+            }
             cbxProduto.Text = "";
             txtValor.Text = "";
             txtQuantidade.Text = "";
@@ -160,9 +218,9 @@ namespace LojaCL
         private void dgvVenda_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             DataGridViewRow row = this.dgvVenda.Rows[e.RowIndex];
-            cbxProduto.Text = row.Cells[1].Value.ToString();
-            txtQuantidade.Text = row.Cells[2].Value.ToString();
-            txtValor.Text = row.Cells[3].Value.ToString();
+            cbxProduto.Text = row.Cells[2].Value.ToString();
+            txtQuantidade.Text = row.Cells[3].Value.ToString();
+            txtValor.Text = row.Cells[4].Value.ToString();
             int linha = dgvVenda.CurrentRow.Index;
         }
 
@@ -264,6 +322,24 @@ namespace LojaCL
                     txtQuantidade.Text = "";
                     txtQuantidade.Focus();
                 }
+            }
+        }
+
+        private void cbxCartao_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            int num_cartao = Convert.ToInt32(cbxCartao.Text);
+            SqlConnection con = Conexao.obterConexao();
+            SqlCommand cmd = con.CreateCommand();
+            cmd.CommandText = "LocalizarUsuarioCartao";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@numero", num_cartao);
+            SqlDataReader reader;
+            reader = cmd.ExecuteReader();
+            if (reader.Read())
+            {
+                txtUsuario.Text = reader[2].ToString();
+                reader.Close();
+                con.Close();
             }
         }
     }
