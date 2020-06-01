@@ -156,6 +156,7 @@ namespace LojaCL
                 txtValor.Text = rd["valor"].ToString();
                 txtId.Text = rd["Id"].ToString();
                 Conexao.fecharConexao();
+                rd.Close();
             } else
             {
                 MessageBox.Show("Nenhum registro encontrado!", "Erro de Registro", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -191,7 +192,7 @@ namespace LojaCL
             Conexao.obterConexao();
             pedidos.ExecuteNonQuery();
             Conexao.fecharConexao();
-            MessageBox.Show("Venda atualizada!", "Atualizar Venda", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show("Produto inserido na venda!", "Atualizar Venda", MessageBoxButtons.OK, MessageBoxIcon.Information);
             SqlCommand cmd2 = con.CreateCommand();
             cmd2.CommandText = "LocalizarVendaGrid";
             cmd2.CommandType = CommandType.StoredProcedure;
@@ -227,13 +228,44 @@ namespace LojaCL
         private void btnEditarItem_Click(object sender, EventArgs e)
         {
             int linha = dgvVenda.CurrentRow.Index;
-            dgvVenda.Rows[linha].Cells[1].Value = cbxProduto.Text;
-            dgvVenda.Rows[linha].Cells[2].Value = txtQuantidade.Text;
-            dgvVenda.Rows[linha].Cells[3].Value = txtValor.Text;
-            dgvVenda.Rows[linha].Cells[4].Value = Convert.ToDouble(txtValor.Text) * Convert.ToDouble(txtQuantidade.Text);
+            dgvVenda.Rows[linha].Cells[0].Value = txtId.Text;
+            dgvVenda.Rows[linha].Cells[2].Value = cbxProduto.Text;
+            dgvVenda.Rows[linha].Cells[3].Value = txtQuantidade.Text;
+            dgvVenda.Rows[linha].Cells[4].Value = txtValor.Text;
+            dgvVenda.Rows[linha].Cells[5].Value = Convert.ToDecimal(txtValor.Text) * Convert.ToDecimal(txtQuantidade.Text);
             decimal soma = 0;
             foreach (DataGridViewRow dr in dgvVenda.Rows)
-                soma += Convert.ToDecimal(dr.Cells[4].Value);
+                soma += Convert.ToDecimal(dr.Cells[5].Value);
+                int num_cartao = Convert.ToInt32(cbxCartao.Text);
+                SqlConnection con = Conexao.obterConexao();
+                SqlCommand cmd = con.CreateCommand();
+                cmd.CommandText = "LocalizarIDCartao";
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@numero", num_cartao);
+                SqlDataReader reader;
+                reader = cmd.ExecuteReader();
+                Int32 cartao = 0;
+                if (reader.Read())
+                {
+                    cartao = reader.GetInt32(0);
+                    reader.Close();
+                }
+            foreach (DataGridViewRow lin in dgvVenda.Rows)
+            {
+                SqlCommand pedidos = new SqlCommand("AtualizarPedidos", con);
+                pedidos.CommandType = CommandType.StoredProcedure;
+                pedidos.Parameters.AddWithValue("@id_cartaovenda", SqlDbType.Int).Value = cartao;
+                pedidos.Parameters.AddWithValue("@id_produto", SqlDbType.Int).Value = Convert.ToInt32(lin.Cells[0].Value);
+                pedidos.Parameters.AddWithValue("@usuario", SqlDbType.NChar).Value = txtUsuario.Text;
+                pedidos.Parameters.AddWithValue("@quantidade", SqlDbType.Int).Value = Convert.ToInt32(lin.Cells[3].Value);
+                pedidos.Parameters.AddWithValue("@dia_hora", SqlDbType.DateTime).Value = DateTime.Now;
+                pedidos.Parameters.AddWithValue("@valor", SqlDbType.Int).Value = Convert.ToDecimal(lin.Cells[4].Value);
+                pedidos.Parameters.AddWithValue("@total", SqlDbType.Int).Value = Convert.ToDecimal(lin.Cells[5].Value);
+                Conexao.obterConexao();
+                pedidos.ExecuteNonQuery();
+                Conexao.fecharConexao();
+            }
+            MessageBox.Show("Venda atualizada!", "Atualizar Venda", MessageBoxButtons.OK, MessageBoxIcon.Information);
             txtValorTotal.Text = Convert.ToString(soma);
             cbxProduto.Text = "";
             txtQuantidade.Text = "";
@@ -244,10 +276,32 @@ namespace LojaCL
         {
             int linha = dgvVenda.CurrentRow.Index;
             dgvVenda.Rows.RemoveAt(linha);
+            int num_cartao = Convert.ToInt32(cbxCartao.Text);
+            SqlConnection con = Conexao.obterConexao();
+            SqlCommand cmd = con.CreateCommand();
+            cmd.CommandText = "LocalizarIDCartao";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@numero", num_cartao);
+            SqlDataReader reader;
+            reader = cmd.ExecuteReader();
+            Int32 cartao = 0;
+            if (reader.Read())
+            {
+                cartao = reader.GetInt32(0);
+                reader.Close();
+            }
+            SqlCommand pedidos = new SqlCommand("ExcluirProdutoPedido", con);
+            pedidos.CommandType = CommandType.StoredProcedure;
+            pedidos.Parameters.AddWithValue("@idcartao", SqlDbType.Int).Value = cartao;
+            pedidos.Parameters.AddWithValue("@idproduto", SqlDbType.Int).Value = Convert.ToInt32(dgvVenda.CurrentRow.Cells[0].Value);
+            Conexao.obterConexao();
+            pedidos.ExecuteNonQuery();
+            Conexao.fecharConexao();
+            MessageBox.Show("Produto Apagado!", "Excluir Produto", MessageBoxButtons.OK, MessageBoxIcon.Information);
             dgvVenda.Refresh();
             decimal soma = 0;
             foreach (DataGridViewRow dr in dgvVenda.Rows)
-                soma += Convert.ToDecimal(dr.Cells[4].Value);
+                soma += Convert.ToDecimal(dr.Cells[5].Value);
             txtValorTotal.Text = Convert.ToString(soma);
             cbxProduto.Text = "";
             txtQuantidade.Text = "";
@@ -260,7 +314,7 @@ namespace LojaCL
             SqlCommand cmd = new SqlCommand("InserirVenda", con);
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.AddWithValue("@valor_pago", SqlDbType.Decimal).Value = Convert.ToDecimal(txtValorTotal.Text);
-            cmd.Parameters.AddWithValue("@id_cliente", SqlDbType.NChar).Value = cbxCartao.SelectedValue;
+            cmd.Parameters.AddWithValue("@cartao", SqlDbType.NChar).Value = cbxCartao.SelectedValue;
             cmd.ExecuteNonQuery();
             string idvenda = "select IDENT_CURRENT('venda') as id_venda";
             SqlCommand cmdvenda = new SqlCommand(idvenda, con);
