@@ -314,7 +314,7 @@ namespace LojaCL
             SqlCommand cmd = new SqlCommand("InserirVenda", con);
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.AddWithValue("@valor_pago", SqlDbType.Decimal).Value = Convert.ToDecimal(txtValorTotal.Text);
-            cmd.Parameters.AddWithValue("@cartao", SqlDbType.NChar).Value = cbxCartao.SelectedValue;
+            cmd.Parameters.AddWithValue("@cartao", SqlDbType.NChar).Value = cbxCartao.Text;
             cmd.ExecuteNonQuery();
             string idvenda = "select IDENT_CURRENT('venda') as id_venda";
             SqlCommand cmdvenda = new SqlCommand(idvenda, con);
@@ -326,17 +326,38 @@ namespace LojaCL
                 //aqui começo a subtrair do meu estoque
                 string ven = "update produto set quantidade = (quantidade - @quantidade2) from produto where Id = @id_produto2";
                 SqlCommand cmditemvenda = new SqlCommand(ven, con);
-                cmditemvenda.Parameters.AddWithValue("@quantidade2", SqlDbType.Int).Value = Convert.ToInt32(dr.Cells[2].Value);
+                cmditemvenda.Parameters.AddWithValue("@quantidade2", SqlDbType.Int).Value = Convert.ToInt32(dr.Cells[3].Value);
                 cmditemvenda.Parameters.AddWithValue("@id_produto2", SqlDbType.Int).Value = Convert.ToInt32(dr.Cells[0].Value);
                 //termina a subtração do estoque
-                cmditens.Parameters.AddWithValue("@quantidade", SqlDbType.Int).Value = Convert.ToInt32(dr.Cells[2].Value);
+                cmditens.Parameters.AddWithValue("@quantidade", SqlDbType.Int).Value = Convert.ToInt32(dr.Cells[3].Value);
                 cmditens.Parameters.AddWithValue("@id_produto", SqlDbType.Int).Value = Convert.ToInt32(dr.Cells[0].Value);
                 cmditens.Parameters.AddWithValue("@id_venda", SqlDbType.Int).Value = idvenda2;
-                cmditens.Parameters.AddWithValue("@valor", SqlDbType.Decimal).Value = Convert.ToDecimal(dr.Cells[3].Value);
-                cmditens.Parameters.AddWithValue("@valor_total", SqlDbType.Decimal).Value = Convert.ToDecimal(dr.Cells[4].Value);
+                cmditens.Parameters.AddWithValue("@valor", SqlDbType.Decimal).Value = Convert.ToDecimal(dr.Cells[4].Value);
+                cmditens.Parameters.AddWithValue("@valor_total", SqlDbType.Decimal).Value = Convert.ToDecimal(dr.Cells[5].Value);
                 Conexao.obterConexao();
                 cmditens.ExecuteNonQuery();
                 cmditemvenda.ExecuteNonQuery();
+                SqlCommand idcartao = con.CreateCommand();
+                idcartao.CommandText = "LocalizarIDCartao";
+                idcartao.CommandType = CommandType.StoredProcedure;
+                int num_cartao = Convert.ToInt32(cbxCartao.Text);
+                idcartao.Parameters.AddWithValue("@numero", num_cartao);
+                SqlDataReader reader;
+                reader = idcartao.ExecuteReader();
+                Int32 cartao = 0;
+                if (reader.Read())
+                {
+                    cartao = reader.GetInt32(0);
+                    reader.Close();
+                }
+                SqlCommand clone = new SqlCommand("InserirPedidos2", con);
+                clone.CommandType = CommandType.StoredProcedure;
+                clone.Parameters.AddWithValue("@id_cartaovenda", SqlDbType.Int).Value = cartao;
+                clone.ExecuteNonQuery();
+                SqlCommand excluir = new SqlCommand("ExcluirProdutoPedido2", con);
+                excluir.CommandType = CommandType.StoredProcedure;
+                excluir.Parameters.AddWithValue("@idcartao", SqlDbType.Int).Value = cartao;
+                excluir.ExecuteNonQuery();
                 Conexao.fecharConexao();
             }
             MessageBox.Show("Venda realizada com sucesso!", "Venda", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -353,6 +374,7 @@ namespace LojaCL
             btnFinalizar.Enabled = false;
             dgvVenda.Enabled = false;
             //limpando o DataGridView
+            dgvVenda.DataSource = null;
             dgvVenda.Rows.Clear();
             dgvVenda.Refresh();
         }
