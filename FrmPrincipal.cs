@@ -132,5 +132,17 @@ namespace LojaCL
             FrmPedido ped = new FrmPedido();
             ped.Show();
         }
+
+        private void clientesToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            FrmRelCliente relcli = new FrmRelCliente();
+            relcli.Show();
+        }
+
+        private void produtosToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            FrmRelProdutos relprod = new FrmRelProdutos();
+            relprod.Show();
+        }
     }
 }

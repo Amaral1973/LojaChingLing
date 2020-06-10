@@ -37,6 +37,7 @@ namespace LojaCL
             cbxCartao.ValueMember = "Id";
             cbxCartao.DisplayMember = "numero";
             cbxCartao.DataSource = ds.Tables["numero"];
+            ds.Dispose();
             Conexao.fecharConexao();
         } 
 
@@ -52,6 +53,7 @@ namespace LojaCL
             cbxProduto.ValueMember = "Id";
             cbxProduto.DisplayMember = "nome";
             cbxProduto.DataSource = ds.Tables["nome"];
+            ds.Dispose();
             Conexao.fecharConexao();
         }
         
@@ -358,6 +360,15 @@ namespace LojaCL
                 excluir.CommandType = CommandType.StoredProcedure;
                 excluir.Parameters.AddWithValue("@idcartao", SqlDbType.Int).Value = cartao;
                 excluir.ExecuteNonQuery();
+                //Atualizar o Status do Cartão
+                string status = "UPDATE cartaovenda SET status = 'False' WHERE numero = @numero";
+                SqlCommand cmdstatus = new SqlCommand(status, con);
+                cmdstatus.CommandType = CommandType.Text;
+                cmdstatus.Parameters.AddWithValue("@numero", SqlDbType.Int).Value = Convert.ToInt32(cbxCartao.Text);
+                cmdstatus.ExecuteNonQuery();
+                //Regarrego o grid do form principal
+                FrmPrincipal obj = (FrmPrincipal)Application.OpenForms["FrmPrincipal"];
+                obj.CarregadgvPripedi();
                 Conexao.fecharConexao();
             }
             MessageBox.Show("Venda realizada com sucesso!", "Venda", MessageBoxButtons.OK, MessageBoxIcon.Information);
