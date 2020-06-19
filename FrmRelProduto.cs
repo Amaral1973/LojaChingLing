@@ -10,17 +10,17 @@ using System.Windows.Forms;
 
 namespace LojaCL
 {
-    public partial class FrmRelCliente : Form
+    public partial class FrmRelProduto : Form
     {
-        public FrmRelCliente()
+        public FrmRelProduto()
         {
             InitializeComponent();
         }
 
-        private void FrmRelCliente_Load(object sender, EventArgs e)
+        private void FrmRelProduto_Load(object sender, EventArgs e)
         {
-            // TODO: esta linha de código carrega dados na tabela 'DBLojaDSMaster.cliente'. Você pode movê-la ou removê-la conforme necessário.
-            this.clienteTableAdapter.Fill(this.DBLojaDSMaster.cliente);
+            // TODO: esta linha de código carrega dados na tabela 'DBLojaDSMaster.produto'. Você pode movê-la ou removê-la conforme necessário.
+            this.produtoTableAdapter.Fill(this.DBLojaDSMaster.produto);
 
             this.reportViewer1.RefreshReport();
         }

@@ -12,10 +12,10 @@
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
-    <IsWebBootstrapper>true</IsWebBootstrapper>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>C:\xampp\htdocs\sistema\</PublishUrl>
     <Install>true</Install>
-    <InstallFrom>Web</InstallFrom>
+    <InstallFrom>Disk</InstallFrom>
     <UpdateEnabled>true</UpdateEnabled>
     <UpdateMode>Foreground</UpdateMode>
     <UpdateInterval>7</UpdateInterval>
@@ -23,7 +23,6 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <InstallUrl>http://localhost/sistema/</InstallUrl>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
     <ApplicationRevision>2</ApplicationRevision>
@@ -61,7 +60,7 @@
     <GenerateManifests>true</GenerateManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <SignManifests>true</SignManifests>
+    <SignManifests>false</SignManifests>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.ReportViewer.Common, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
@@ -97,15 +96,20 @@
   <ItemGroup>
     <Compile Include="Conexao.cs" />
     <Compile Include="Cripto.cs" />
-    <Compile Include="DbLojaDataSet.Designer.cs">
+    <Compile Include="DBLojaDSMaster.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>DbLojaDataSet.xsd</DependentUpon>
+      <DependentUpon>DBLojaDSMaster.xsd</DependentUpon>
     </Compile>
-    <Compile Include="DbLojaDataSet1.Designer.cs">
+    <Compile Include="DSVenda.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>DbLojaDataSet1.xsd</DependentUpon>
+      <DependentUpon>DSVenda.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="DSVenda2.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DSVenda2.xsd</DependentUpon>
     </Compile>
     <Compile Include="FrmCrudCartaoVenda.cs">
       <SubType>Form</SubType>
@@ -149,17 +153,47 @@
     <Compile Include="FrmPrincipal.Designer.cs">
       <DependentUpon>FrmPrincipal.cs</DependentUpon>
     </Compile>
+    <Compile Include="FrmRelCartao.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmRelCartao.Designer.cs">
+      <DependentUpon>FrmRelCartao.cs</DependentUpon>
+    </Compile>
     <Compile Include="FrmRelCliente.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="FrmRelCliente.Designer.cs">
       <DependentUpon>FrmRelCliente.cs</DependentUpon>
     </Compile>
-    <Compile Include="FrmRelProdutos.cs">
+    <Compile Include="FrmRelProdTipo.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FrmRelProdutos.Designer.cs">
-      <DependentUpon>FrmRelProdutos.cs</DependentUpon>
+    <Compile Include="FrmRelProdTipo.Designer.cs">
+      <DependentUpon>FrmRelProdTipo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmRelProduto.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmRelProduto.Designer.cs">
+      <DependentUpon>FrmRelProduto.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmRelUsuario.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmRelUsuario.Designer.cs">
+      <DependentUpon>FrmRelUsuario.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmRelVenda.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmRelVenda.Designer.cs">
+      <DependentUpon>FrmRelVenda.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmRelVenda2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmRelVenda2.Designer.cs">
+      <DependentUpon>FrmRelVenda2.cs</DependentUpon>
     </Compile>
     <Compile Include="FrmVenda.cs">
       <SubType>Form</SubType>
@@ -191,11 +225,26 @@
     <EmbeddedResource Include="FrmPrincipal.resx">
       <DependentUpon>FrmPrincipal.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="FrmRelCartao.resx">
+      <DependentUpon>FrmRelCartao.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FrmRelCliente.resx">
       <DependentUpon>FrmRelCliente.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FrmRelProdutos.resx">
-      <DependentUpon>FrmRelProdutos.cs</DependentUpon>
+    <EmbeddedResource Include="FrmRelProdTipo.resx">
+      <DependentUpon>FrmRelProdTipo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmRelProduto.resx">
+      <DependentUpon>FrmRelProduto.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmRelUsuario.resx">
+      <DependentUpon>FrmRelUsuario.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmRelVenda.resx">
+      <DependentUpon>FrmRelVenda.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmRelVenda2.resx">
+      <DependentUpon>FrmRelVenda2.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FrmVenda.resx">
       <DependentUpon>FrmVenda.cs</DependentUpon>
@@ -209,29 +258,45 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="RelCa.rdlc" />
     <EmbeddedResource Include="RelCli.rdlc" />
     <EmbeddedResource Include="RelProd.rdlc" />
-    <None Include="DbLojaDataSet.xsc">
-      <DependentUpon>DbLojaDataSet.xsd</DependentUpon>
+    <EmbeddedResource Include="RelProdTipo.rdlc" />
+    <EmbeddedResource Include="RelUsu.rdlc" />
+    <EmbeddedResource Include="RelVenda.rdlc" />
+    <EmbeddedResource Include="RelVenda2.rdlc" />
+    <None Include="DBLojaDSMaster.xsc">
+      <DependentUpon>DBLojaDSMaster.xsd</DependentUpon>
     </None>
-    <None Include="DbLojaDataSet.xsd">
+    <None Include="DBLojaDSMaster.xsd">
       <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>DbLojaDataSet.Designer.cs</LastGenOutput>
+      <LastGenOutput>DBLojaDSMaster.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="DbLojaDataSet.xss">
-      <DependentUpon>DbLojaDataSet.xsd</DependentUpon>
+    <None Include="DBLojaDSMaster.xss">
+      <DependentUpon>DBLojaDSMaster.xsd</DependentUpon>
     </None>
-    <None Include="DbLojaDataSet1.xsc">
-      <DependentUpon>DbLojaDataSet1.xsd</DependentUpon>
+    <None Include="DSVenda.xsc">
+      <DependentUpon>DSVenda.xsd</DependentUpon>
     </None>
-    <None Include="DbLojaDataSet1.xsd">
+    <None Include="DSVenda.xsd">
       <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>DbLojaDataSet1.Designer.cs</LastGenOutput>
+      <LastGenOutput>DSVenda.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="DbLojaDataSet1.xss">
-      <DependentUpon>DbLojaDataSet1.xsd</DependentUpon>
+    <None Include="DSVenda.xss">
+      <DependentUpon>DSVenda.xsd</DependentUpon>
+    </None>
+    <None Include="DSVenda2.xsc">
+      <DependentUpon>DSVenda2.xsd</DependentUpon>
+    </None>
+    <None Include="DSVenda2.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>DSVenda2.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="DSVenda2.xss">
+      <DependentUpon>DSVenda2.xsd</DependentUpon>
     </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -260,13 +325,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="DbLoja.mdf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="DbLoja_log.ldf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <DependentUpon>DbLoja.mdf</DependentUpon>
-    </Content>
     <Content Include="SqlServerTypes\readme.htm" />
     <Content Include="SqlServerTypes\x64\msvcr120.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -280,6 +338,9 @@
     <Content Include="SqlServerTypes\x86\SqlServerSpatial140.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

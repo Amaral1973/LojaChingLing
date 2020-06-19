@@ -79,11 +79,13 @@ namespace LojaCL
             if (rd.Read())
             {
                 txtUsuario.Text = rd["usuario"].ToString();
+                rd.Close();
                 Conexao.fecharConexao();
             }
             else
             {
                 MessageBox.Show("Nenhum registro encontrado!", "Falha na Pesquisa", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                rd.Close();
                 Conexao.fecharConexao();
             }
         }
@@ -119,11 +121,13 @@ namespace LojaCL
             {
                 txtValor.Text = rd["valor"].ToString();
                 txtId.Text = rd["Id"].ToString();
+                rd.Close();
                 Conexao.fecharConexao();
             }
             else
             {
                 MessageBox.Show("Nenhum registro encontrado!", "Falha na Pesquisa", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                rd.Close();
                 Conexao.fecharConexao();
             }
         }

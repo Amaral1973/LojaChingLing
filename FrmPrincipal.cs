@@ -141,8 +141,26 @@ namespace LojaCL
 
         private void produtosToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            FrmRelProdutos relprod = new FrmRelProdutos();
+            FrmRelProduto relprod = new FrmRelProduto();
             relprod.Show();
+        }
+
+        private void usuáriosToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            FrmRelUsuario relusu = new FrmRelUsuario();
+            relusu.Show();
+        }
+
+        private void cartãoDeVendaToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            FrmRelCartao relca = new FrmRelCartao();
+            relca.Show();
+        }
+
+        private void produtoTipoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmRelProdTipo relprotipo = new FrmRelProdTipo();
+            relprotipo.Show();
         }
     }
 }

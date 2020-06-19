@@ -371,7 +371,14 @@ namespace LojaCL
                 obj.CarregadgvPripedi();
                 Conexao.fecharConexao();
             }
-            MessageBox.Show("Venda realizada com sucesso!", "Venda", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            DialogResult rel = MessageBox.Show("Venda realizada com sucesso! Gostaria de imprimir a nota?", "Venda", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+            if (rel == DialogResult.Yes)
+            {
+                FrmRelVenda2 relven = new FrmRelVenda2();
+                relven.cartao = cbxCartao.Text;
+                relven.Show();
+                this.Close();
+            }
             cbxProduto.Text = "";
             txtQuantidade.Text = "";
             txtValor.Text = "";

@@ -1,6 +1,6 @@
 ﻿namespace LojaCL
 {
-    partial class FrmRelCliente
+    partial class FrmRelUsuario
     {
         /// <summary>
         /// Required designer variable.
@@ -32,23 +32,23 @@
             Microsoft.Reporting.WinForms.ReportDataSource reportDataSource1 = new Microsoft.Reporting.WinForms.ReportDataSource();
             this.reportViewer1 = new Microsoft.Reporting.WinForms.ReportViewer();
             this.DBLojaDSMaster = new LojaCL.DBLojaDSMaster();
-            this.clienteBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.clienteTableAdapter = new LojaCL.DBLojaDSMasterTableAdapters.clienteTableAdapter();
+            this.usuarioBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.usuarioTableAdapter = new LojaCL.DBLojaDSMasterTableAdapters.usuarioTableAdapter();
             ((System.ComponentModel.ISupportInitialize)(this.DBLojaDSMaster)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.clienteBindingSource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.usuarioBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // reportViewer1
             // 
             this.reportViewer1.Dock = System.Windows.Forms.DockStyle.Fill;
             reportDataSource1.Name = "DataSet1";
-            reportDataSource1.Value = this.clienteBindingSource;
+            reportDataSource1.Value = this.usuarioBindingSource;
             this.reportViewer1.LocalReport.DataSources.Add(reportDataSource1);
-            this.reportViewer1.LocalReport.ReportEmbeddedResource = "LojaCL.RelCli.rdlc";
+            this.reportViewer1.LocalReport.ReportEmbeddedResource = "LojaCL.RelUsu.rdlc";
             this.reportViewer1.Location = new System.Drawing.Point(0, 0);
             this.reportViewer1.Name = "reportViewer1";
             this.reportViewer1.ServerReport.BearerToken = null;
-            this.reportViewer1.Size = new System.Drawing.Size(696, 374);
+            this.reportViewer1.Size = new System.Drawing.Size(688, 375);
             this.reportViewer1.TabIndex = 0;
             // 
             // DBLojaDSMaster
@@ -56,27 +56,27 @@
             this.DBLojaDSMaster.DataSetName = "DBLojaDSMaster";
             this.DBLojaDSMaster.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
             // 
-            // clienteBindingSource
+            // usuarioBindingSource
             // 
-            this.clienteBindingSource.DataMember = "cliente";
-            this.clienteBindingSource.DataSource = this.DBLojaDSMaster;
+            this.usuarioBindingSource.DataMember = "usuario";
+            this.usuarioBindingSource.DataSource = this.DBLojaDSMaster;
             // 
-            // clienteTableAdapter
+            // usuarioTableAdapter
             // 
-            this.clienteTableAdapter.ClearBeforeFill = true;
+            this.usuarioTableAdapter.ClearBeforeFill = true;
             // 
-            // FrmRelCliente
+            // FrmRelUsuario
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(696, 374);
+            this.ClientSize = new System.Drawing.Size(688, 375);
             this.Controls.Add(this.reportViewer1);
-            this.Name = "FrmRelCliente";
+            this.Name = "FrmRelUsuario";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Relatório de Clientes";
-            this.Load += new System.EventHandler(this.FrmRelCliente_Load);
+            this.Text = "Relatório de Usuários";
+            this.Load += new System.EventHandler(this.FrmRelUsuario_Load);
             ((System.ComponentModel.ISupportInitialize)(this.DBLojaDSMaster)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.clienteBindingSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.usuarioBindingSource)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -84,8 +84,8 @@
         #endregion
 
         private Microsoft.Reporting.WinForms.ReportViewer reportViewer1;
-        private System.Windows.Forms.BindingSource clienteBindingSource;
+        private System.Windows.Forms.BindingSource usuarioBindingSource;
         private DBLojaDSMaster DBLojaDSMaster;
-        private DBLojaDSMasterTableAdapters.clienteTableAdapter clienteTableAdapter;
+        private DBLojaDSMasterTableAdapters.usuarioTableAdapter usuarioTableAdapter;
     }
 }

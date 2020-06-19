@@ -10,7 +10,7 @@ namespace LojaCL
 {
     class Conexao
     {
-        private static string str = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Programas\\LojaCL\\DbLoja.mdf;Integrated Security=True;MultipleActiveResultSets=True;Connect Timeout=30";
+        private static string str = "Data Source=aula2020.database.windows.net;Initial Catalog=DBLoja;User ID=tds02;Password=@nuvem2020;Connect Timeout=60;Encrypt=True;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
         private static SqlConnection con = null;
         public static SqlConnection obterConexao()
         {
